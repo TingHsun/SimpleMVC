@@ -1,0 +1,91 @@
+﻿@model Models.Data.ViewModel.AutoMachineReportModel
+
+@{
+    ViewBag.Title = "AutoMachine";
+    var model = new Models.Data.ViewModel.AutoMachineReportModel
+    {
+        DataList = new List<Models.Data.ViewModel.AutoMachineDataModel>
+        {
+            new Models.Data.ViewModel.AutoMachineDataModel{AutoID=0, Description="test01@gmail.com", Length = 100, TestDate = DateTime.Now},
+            new Models.Data.ViewModel.AutoMachineDataModel{AutoID=0, Description="test02@gmail.com", Length = 200, TestDate = DateTime.Now},
+        }
+    };
+}
+
+@section scripts{
+    <script>
+        function AutoMachineDelete(value)
+        {
+            if (confirm("是否進行刪除?"))
+            {
+                $.ajax({
+                    type: 'post',
+                    url: '@Url.Action("AutoMachineDelete", "Report")',
+                    data: { "autoID": parseInt(value) },
+                    success: function (response)
+                    {
+                        if (response.Result == true)
+                        {
+                            $('.table .list-group-' + value).remove();
+                        }
+                        else
+                        {
+                            alert(response.Message);
+                        }
+                    },
+                    error: function ()
+                    {
+                        console.log("AutoMachineDelete Ajax Error");
+                    }
+                })
+            }
+        }
+    </script>
+}
+
+<div>
+    <h2>
+        <span>自動機台</span>
+        <a href="@Url.Action("AutoMachineCreate", "Report")" class="btn btn-primary" style="float:right;">新增</a>
+    </h2>
+</div>
+<table class="table">
+    <thead>
+        <tr class="list-group"><td>操作</td><td>型號</td><td>長度</td><td>描述</td><td>產能</td><td>配置人員</td><td>備註</td><td>測定日期</td></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in model.DataList)
+        {
+            <tr class="list-group list-group-@item.AutoID">
+                <td>
+                    @Html.ActionLink("編輯", "AutoMachineEdit", new { id = item.AutoID }, new { @class = "btn btn-success" })
+                    <button class="btn btn-warning" onclick="AutoMachineDelete(@item.AutoID)">刪除</button>
+                </td>
+                <td>@item.TypeID</td>
+                <td>@item.Length</td>
+                <td>@item.Description</td>
+                <td>@item.ProductionCapacity</td>
+                <td>@item.People</td>
+                <td>@item.Note</td>
+                <td>@item.TestDate.ToString("yyyy/MM/dd")</td>
+            </tr>
+        }
+        @foreach(var item in Model.DataList)
+        {
+            <tr class="list-group list-group-@item.AutoID">
+                <td>
+                    @Html.ActionLink("編輯", "AutoMachineEdit", new { id = item.AutoID }, new { @class = "btn btn-success" })
+                    <button class="btn btn-warning" onclick="AutoMachineDelete(@item.AutoID)">刪除</button>
+                </td>
+                <td>@item.TypeID</td>
+                <td>@item.Length</td>
+                <td>@item.Description</td>
+                <td>@item.ProductionCapacity</td>
+                <td>@item.People</td>
+                <td>@item.Note</td>
+                <td>@item.TestDate.ToString("yyyy/MM/dd")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

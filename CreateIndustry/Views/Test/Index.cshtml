@@ -1,0 +1,66 @@
+﻿@model Models.Data.ViewModel.UserViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<script>
+
+    function AddScore(value)
+    {
+        //$('#total_score').text(parseFloat($('#total_score').text()) + 100);
+
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("AddScore", "Test")',
+            data: { "score": parseFloat(value) },
+            success: function (response)
+            {
+                ShowResult(response)
+            },
+            error: function ()
+            {
+                alert("AddScore失敗");
+            }
+        })
+    }
+
+    function ShowResult(res)
+    {
+        $('#total_score').text(res.Score);
+    }
+
+</script>
+
+<div class="jumbotron">
+    <h1>Max's World</h1>
+    <p class="lead">
+        總分:
+        <span id="total_score">@ViewBag.TotalScore</span>
+    </p>
+    <p class="lead">信箱: @Model.Email</p>
+    <p class="lead">手機: @Model.Mobile</p>
+    <p><a href="Javascript:void(0);" class="btn btn-primary btn-lg" onclick="AddScore($('#total_score').text())">增加總分 &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>
